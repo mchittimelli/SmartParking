@@ -31,6 +31,7 @@ public class ApplicationConfig extends Application {
     private void addRestResourceClasses(Set<Class<?>> resources) {
         resources.add(parking.CORSResponseFilter.class);
         resources.add(parking.Parking.class);
+        
     }
     
 }

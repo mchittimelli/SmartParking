@@ -18,10 +18,13 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
+//import org.json.simple.JSONArray;
 import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
+import org.json.simple.JSONObject;
+//import net.sf.json.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
@@ -53,7 +56,6 @@ public class Parking {
      * @return an instance of java.lang.String
      */
     @GET
-    @Path("slot")
     @Produces("application/json")
     public String getJson() {
         //TODO return proper representation object
@@ -76,14 +78,14 @@ public class Parking {
                 slotid = rs.getString(1);
                 availability = rs.getBoolean(2);
                 
-                slotsObj.accumulate("slot", slotid);
-                slotsObj.accumulate("availability", availability);
+                slotsObj.put("slot", slotid);
+                slotsObj.put("availability", availability);
                 jSONArray.add(slotsObj);
                 slotsObj.clear();
                     
             } 
-            mainObj.accumulate("building", "OnePoint");
-            mainObj.accumulate("parkingFloorA", jSONArray);
+            mainObj.put("building", "OnePoint");
+            mainObj.put("parkingFloorA", jSONArray);
             
 
         } catch (ClassNotFoundException ex) {
@@ -110,18 +112,42 @@ public class Parking {
     
     
      
-    @PUT
+    @POST
     @Consumes("application/json")
     public String putJson(String json) {
         System.out.println("JSON: " + json);
-        
         JSONParser parser = new JSONParser();
         try {
+            createConnection();
             JSONObject jSONObject = (JSONObject) parser.parse(json);
+            jSONObject.get("id");                   
             
-            jSONObject.get("updatedSlots");
+            String sql = "update slots "
+                    + "set availability = ?"  
+                    + " where slot_id = ?" ;
+            
+            stm = con.prepareStatement(sql);
+            String slot_id = jSONObject.get("id").toString();
+            
+            stm.setString(2, slot_id);
+            
+            if(jSONObject.get("availability").equals("true")){
+                stm.setBoolean(1, true);
+            } else{
+                stm.setBoolean(1, false);
+            }
+            
+            
+            
+            
+            stm.executeUpdate();
+        
             
         } catch (ParseException ex) {
+            Logger.getLogger(Parking.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(Parking.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
             Logger.getLogger(Parking.class.getName()).log(Level.SEVERE, null, ex);
         }
         
@@ -160,11 +186,11 @@ public class Parking {
     }
 
     public String getError(String name, Object key, Object value) {
-        mainObj.accumulate("Status", "Error");
+        mainObj.put("Status", "Error");
         if (!value.toString().equals("0")) {
-            mainObj.accumulate(key.toString(), value);
+            mainObj.put(key.toString(), value);
         }
-        mainObj.accumulate("Message", name);
+        mainObj.put("Message", name);
         return mainObj.toString();
     }
 
