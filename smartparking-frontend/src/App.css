@@ -1,9 +1,28 @@
 .block{
-  width: 100px ;
-  height: 410px;
+  display: flex;
+  flex-wrap: wrap;
 }
-.slot{
-  width: 100px;
-  height: 300px;
-  color: aquamarine;
+.occupy{
+  margin: 20px;
+  display: flex;
+  flex-direction: column;
+  width: fit-content;
+  border: 1px solid black;
+  border-radius: 3px;
+  padding: 30px;
+  background: red;
 }
+.release{
+  margin: 20px;
+  display: flex;
+  flex-direction: column;
+  width: fit-content;
+  border: 1px solid black;
+  border-radius: 3px;
+  padding: 30px;
+  background: green;
+}
+.MuiSvgIcon-root{
+  font-size: large;
+  color: white;
+} 
