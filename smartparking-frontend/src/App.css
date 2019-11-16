@@ -16,6 +16,7 @@
   text-align: center;
   padding: 30px;
   background: #ec1a10db;
+  box-shadow: -4px -2px 9px 0px;
 }
 .release{
   margin: 20px;
@@ -27,6 +28,7 @@
   border-radius: 3px;
   padding: 30px;
   background: #25a025;
+  box-shadow: -4px -2px 9px 0px;
 }
 .MuiSvgIcon-root{
   font-size: large;
