@@ -50,35 +50,38 @@ public class Parking {
      * @return an instance of java.lang.String
      */
     @GET
-    @Path("slot&{id}")
+    @Path("slot")
     @Produces("application/json")
-    public String getJson(@PathParam("id") int id) {
+    public String getJson() {
         //TODO return proper representation object
         try {
             createConnection();
             
-            String sql = "select * from countries WHERE region_id = ?";
+            String sql = "select * from slots";
 
             stm = con.prepareStatement(sql);
-            stm.setInt(1, id);
 
             ResultSet rs = stm.executeQuery();
 
-            String countryid = null, countryname = null;
+            String slotid = null;
+            Boolean availability = null;
+            
+            JSONArray jSONArray = new JSONArray();
+            JSONObject slotsObj = new JSONObject();
 
-            if (rs.next() == false) {
-                getError("UserId: " + id + " doesn't exist", "UserId", id);
-            } else {
-                do {
-                    countryid = rs.getString(1);
-                    countryname = rs.getString(2);
+            while (rs.next()){
+                slotid = rs.getString(1);
+                availability = rs.getBoolean(2);
+                
+                slotsObj.accumulate("slot", slotid);
+                slotsObj.accumulate("availability", availability);
+                jSONArray.add(slotsObj);
+                slotsObj.clear();
                     
-                } while (rs.next());
-
-                mainObj.accumulate("Region ID", id);
-                mainObj.accumulate("Country Id", countryid);
-                mainObj.accumulate("Country Name", countryname);
-            }
+            } 
+            mainObj.accumulate("building", "OnePoint");
+            mainObj.accumulate("parkingFloorA", jSONArray);
+            
 
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Parking.class.getName()).log(Level.SEVERE,
@@ -101,23 +104,19 @@ public class Parking {
      * @param content representation for the resource
      * @return an HTTP response with content of the updated or created resource.
      */
+    
+    
+    
     @PUT
     @Consumes("application/json")
-    public void putJson(String content) {
-    }
-/*
-    private static void createConnection() throws ClassNotFoundException, SQLException {
-        Class.forName("oracle.jdbc.OracleDriver");
-        con = DriverManager.getConnection(
-                "jdbc:oracle:thin:@144.217.163.57:1521:XE",
-                "mad310team5", "anypw");
+    public void putJson(String jSON) {
+        System.out.println("JSON: " + jSON);
     }
     
-    */
     private static void createConnection() throws ClassNotFoundException, SQLException {
         Class.forName("com.mysql.jdbc.Driver");
         con = DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/hr?autoReconnect=true&useSSL=false",
+                "jdbc:mysql://localhost:3306/parking?autoReconnect=true&useSSL=false",
                 "root", "naren");
     }
 
