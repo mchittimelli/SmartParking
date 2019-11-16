@@ -52,7 +52,11 @@ class App extends Component {
   }
   render() {
     return (
+      <div>
+  <div className = 'total'>Total Slots : {this.state.parkingLots.length}</div>
+  
       <div className = 'block'>
+
         {this.state.parkingLots.map((item, index) => (
           <div key = { index }   className = {item.availability ? 'occupy' : 'release'} >
             
@@ -63,6 +67,7 @@ class App extends Component {
              </div>
         ))
         }
+      </div>
       </div>
     );
   }
