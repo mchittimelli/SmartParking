@@ -22,6 +22,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
 
 /**
  * REST Web Service
@@ -106,11 +109,23 @@ public class Parking {
      */
     
     
-    
+     
     @PUT
     @Consumes("application/json")
-    public void putJson(String jSON) {
-        System.out.println("JSON: " + jSON);
+    public String putJson(String json) {
+        System.out.println("JSON: " + json);
+        
+        JSONParser parser = new JSONParser();
+        try {
+            JSONObject jSONObject = (JSONObject) parser.parse(json);
+            
+            jSONObject.get("updatedSlots");
+            
+        } catch (ParseException ex) {
+            Logger.getLogger(Parking.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return json.toString();
     }
     
     private static void createConnection() throws ClassNotFoundException, SQLException {
