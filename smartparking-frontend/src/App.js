@@ -56,7 +56,7 @@ class App extends Component {
         {this.state.parkingLots.map((item, index) => (
           <div key = { index }   className = {item.availability ? 'occupy' : 'release'} >
             
-            {item.slot}
+            <div className= 'slotNumber'>{item.slot}</div> 
             <div ><DirectionsCarOutlinedIcon className = 'carIcon' /></div>
             {item.availability ? <button onClick = {() => this.updateAvailability(index)}>Release</button> :
                     <button onClick = {() => this.updateAvailability(index)}>Occupy</button>}

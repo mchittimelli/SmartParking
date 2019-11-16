@@ -9,20 +9,32 @@
   width: fit-content;
   border: 1px solid black;
   border-radius: 3px;
+  text-align: center;
   padding: 30px;
-  background: red;
+  background: #ec1a10db;
 }
 .release{
   margin: 20px;
   display: flex;
+  text-align: center;
   flex-direction: column;
   width: fit-content;
   border: 1px solid black;
   border-radius: 3px;
   padding: 30px;
-  background: green;
+  background: #25a025;
 }
 .MuiSvgIcon-root{
   font-size: large;
   color: white;
 } 
+.slotNumber{
+  color: white;
+  font-weight: bold;
+}
+button{
+  background: white;
+    border: none;
+    border-radius: 2px;
+    padding: 3px;
+}
